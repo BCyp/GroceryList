@@ -3,7 +3,7 @@
 <form name="input" action="/item/check" method = "post">
 <ul>{{#each item}}
 {{#if this.checked}}
-	<li>{{this.quantity}} X {{this.name}}</li>
+	<s><li>{{this.quantity}} X {{this.name}}</li></s>
 {{else}}
 	<li><label>{{this.quantity}} X {{this.name}}</label><input type="checkbox" name="check" value={{@index}}></li>
 {{/if}}

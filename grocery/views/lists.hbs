@@ -1,8 +1,16 @@
 <h1>{{title}}</h1>
 <p>Welcome to {{title}}</p>
+<form name="input" action="/item/check" method = "post">
 <ul>{{#each item}}
-<li>{{this.quantity}} X {{this.name}}</li>
+{{#if this.checked}}
+	<li>{{this.quantity}} X {{this.name}}</li>
+{{else}}
+	<li><label>{{this.quantity}} X {{this.name}}</label><input type="checkbox" name="check" value={{@index}}></li>
+{{/if}}
 {{/each}}
+<input type="hidden" name="slug" value={{slug}}>
+<input type="submit" value="Submit" name = "Check off Boxes">
+</form>
 </ul>
 <form name="input" action="/item/create" method="post">
 Item: <input name = "name">

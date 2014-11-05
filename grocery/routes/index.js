@@ -32,18 +32,17 @@ router.post('/list/create', function(req, res){
 });
 router.get('/list/:slug', function(req, res) {
   List.findOne({slug: req.params.slug}, function(err, list, count) {
-	res.render('lists', { title: list.name, slug : list.slug, item : list.items});
+	res.render('lists', { title: list.name, slug : list.slug, item : list.items, counter : 0});
 });
 });
 router.post('/item/create', function(req, res){
 	console.log(req.body);
 	 List.findOne({slug: req.body.slug }, function(err, list, count) {
-	 	console.log(req.body);
-	 	console.log(list);
 	new Item({
 			name : req.body.name,
 			quantity: req.body.quantity,
-			slug: req.body.slug
+			slug: req.body.slug,
+			checked: false
 		}).save(function(err, item, count){
 			console.log(req.body);
 		  	list.items.push(item);
@@ -53,4 +52,19 @@ router.post('/item/create', function(req, res){
 	});
 });
 });
+router.post('/item/check', function(req, res){
+	console.log(req.body);
+	console.log(req.body.check);
+	 List.findOne({slug: req.body.slug }, function(err, list, count) {
+			for(var i =0; i < req.body.check.length; i++){
+				var checker = req.body.check[i];
+				list.items[checker].checked = true;
+
+			};
+		list.save(function(err, list, count){
+		res.redirect('/list/'+list.slug);
+		});
+	});
+});
+
 module.exports = router;

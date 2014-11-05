@@ -1,6 +1,11 @@
-<h1> {{title}}</h1>
-<h2> My List </h2>
-<ul> {{#each lists}}
-	<li> {{this.name}}</li>
+<h1>{{title}}</h1>
+<p>Welcome to {{title}}</p>
+<ul>{{#each item}}
+<li>{{this.quantity}} X {{this.name}}</li>
 {{/each}}
 </ul>
+<form name="input" action="/list/katz" method="post">
+Item: <input name = "name">
+Quantity: <input name ="quantity">
+<input type="submit" value="Submit">
+</form> 

@@ -27,23 +27,30 @@ router.post('/list/create', function(req, res){
 		createdBy: null,
 		items: []
 	}).save(function(err, list, count){
-		res.redirect('/list/:thing');
+		res.redirect('/list/'+list.slug);
 	});
 });
-router.get('/list/:thing', function(req, res) {
-  List.findOne({slug: req.params.thing }, function(err, list, count) {
-	res.render('lists', { title: list.name});
+router.get('/list/:slug', function(req, res) {
+  List.findOne({slug: req.params.slug}, function(err, list, count) {
+	res.render('lists', { title: list.name, slug : list.slug, item : list.items});
 });
 });
-router.post('/list/:thing', function(req, res){
+router.post('/item/create', function(req, res){
 	console.log(req.body);
+	 List.findOne({slug: req.body.slug }, function(err, list, count) {
+	 	console.log(req.body);
+	 	console.log(list);
 	new Item({
 			name : req.body.name,
 			quantity: req.body.quantity,
-			slug: req.params.thing
+			slug: req.body.slug
 		}).save(function(err, item, count){
-		console.log(item.name);
-		console.log(item.quantity);
+			console.log(req.body);
+		  	list.items.push(item);
+		list.save(function(err, list, count){
+		res.redirect('/list/'+list.slug);
+		});
 	});
+});
 });
 module.exports = router;

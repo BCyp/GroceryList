@@ -4,8 +4,9 @@
 <li>{{this.quantity}} X {{this.name}}</li>
 {{/each}}
 </ul>
-<form name="input" action="/list/katz" method="post">
+<form name="input" action="/item/create" method="post">
 Item: <input name = "name">
 Quantity: <input name ="quantity">
+<input type="hidden" name="slug" value={{slug}}>
 <input type="submit" value="Submit">
 </form> 

@@ -5,12 +5,15 @@ var List = mongoose.model('List');
 var Item = mongoose.model('Item');
 /* GET home page. */
 router.get('/', function(req, res) {
+	console.log(req.body);
   res.render('index', { title: 'Expess' });
 });
 router.get('/lists', function(req, res) {
+	console.log(req.body);
   res.render('lists', { title: 'My Grocery Lists', lists : Lists});
 });
 router.get('/list', function(req, res) {
+	console.log(req.body);
   List.find(function(err, list, count) {
 		res.render( 'list', {
 			list: list
@@ -18,6 +21,7 @@ router.get('/list', function(req, res) {
 	});
 });
 router.get('/list/create', function(req, res) {
+	console.log(req.body);
   res.render('create', { title: 'Create a New List', name : null});
 });
 router.post('/list/create', function(req, res){
@@ -31,6 +35,7 @@ router.post('/list/create', function(req, res){
 	});
 });
 router.get('/list/:slug', function(req, res) {
+	console.log(req.body);
   List.findOne({slug: req.params.slug}, function(err, list, count) {
 	res.render('lists', { title: list.name, slug : list.slug, item : list.items, counter : 0});
 });
@@ -44,7 +49,6 @@ router.post('/item/create', function(req, res){
 			slug: req.body.slug,
 			checked: false
 		}).save(function(err, item, count){
-			console.log(req.body);
 		  	list.items.push(item);
 		list.save(function(err, list, count){
 		res.redirect('/list/'+list.slug);
@@ -54,8 +58,10 @@ router.post('/item/create', function(req, res){
 });
 router.post('/item/check', function(req, res){
 	console.log(req.body);
-	console.log(req.body.check);
 	 List.findOne({slug: req.body.slug }, function(err, list, count) {
+	 	if(typeof(req.body.check) === 'undefined')
+	 		res.redirect('/list/'+list.slug);
+	 	else{
 			for(var i =0; i < req.body.check.length; i++){
 				var checker = req.body.check[i];
 				list.items[checker].checked = true;
@@ -64,6 +70,7 @@ router.post('/item/check', function(req, res){
 		list.save(function(err, list, count){
 		res.redirect('/list/'+list.slug);
 		});
+	};
 	});
 });
 
